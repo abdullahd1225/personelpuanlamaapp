@@ -2,12 +2,12 @@ const fastify = require("fastify")
 const mongodb = require("mongodb")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-const {reset} = require("nodemon/lib/rules");
 let jwt_secret_key = "very very secret key"
 
 let main = async() => {
     try {
         console.log("starting")
+
 
         const db_client = new mongodb.MongoClient("mongodb://localhost:27017")
 
@@ -17,10 +17,6 @@ let main = async() => {
         let db = db_client.db("tsoft_personel")
         let user_db = db.collection("user")
         let personal_db = db.collection("personal")
-
-
-
-
 
         let admin = await user_db.findOne({_id: "admin"})
         if(admin == null) {
@@ -57,7 +53,7 @@ let main = async() => {
 
 
 
-        app.post("personal",async (req,res ) => {
+        app.post("/personal",async (req,res ) => {
             await personal_db.insertOne({
                 name :      req.body.name,
                 phone:      req.body.phone,
@@ -68,7 +64,7 @@ let main = async() => {
 
         })
 
-        app.post("gosterge" , async (req,res) =>{
+        app.post("/gosterge" , async (req,res) =>{
             await personal_db.insertOne({
                 takimcalismasi:   req.body.takimcalismasi,
                 musteriodaklilik: req.body.musteriodaklilik,
@@ -79,7 +75,7 @@ let main = async() => {
 
             })
         })
-        app.post("takimcalismasi",async (req,res)=>{
+        app.post("/takimcalismasi",async (req,res)=>{
             await personal_db.insertOne({
                 ekipcalismasi: req.body.takimcalismasi.ekipcalismasi,
                 isarkadas:     req.body.takimcalismasi.isarkadas,
@@ -90,14 +86,14 @@ let main = async() => {
 
             })
         })
-        app.post("musteriodaklilik",async (req,res)=>{
+        app.post("/musteriodaklilik",async (req,res)=>{
             await personal_db.insertOne({
                 musteriodaklilik: req.body.musteriodaklilik.musteri_satis,
 
             })
         })
 
-        app.post("iletisim",async (req,res) => {
+        app.post("/iletisim",async (req,res) => {
             await personal_db.insertOne({
                 dinlenme:     req.body.dinlenme,
                 pozitifolma:  req.body.pozitifolma,
@@ -106,7 +102,7 @@ let main = async() => {
             })
         })
 
-        app.post("gelisim" ,async (req,res)=>{
+        app.post("/gelisim" ,async (req,res)=>{
             await personal_db.insertOne({
                 ogrenmeyeacikolma: req.body.ogrenmeyeacikolma,
                 proaktifyaklasim:  req.body.proaktifyaklasim,
@@ -116,7 +112,7 @@ let main = async() => {
             })
         })
 
-        app.post("disiplin" , async (req,res)=>{
+        app.post("/disiplin" , async (req,res)=>{
             await  personal_db.insertOne({
 
                 stresyonetimi: req.body.stresyonetimi,
@@ -127,7 +123,7 @@ let main = async() => {
             })
         })
 
-        app.post("verimlilik", async (req,res)=>{
+        app.post("/verimlilik", async (req,res)=>{
             await personal_db.insertOne({
                 jetofis: req.body.jetofis,
                 makale:  req.body.makale,
@@ -135,7 +131,7 @@ let main = async() => {
             })
         })
 
-        app.post("toplampuan",async (req,res)=>{
+        app.post("/toplampuan",async (req,res)=>{
             await personal_db.insertOne({
                 toplampuan: req.body.toplampuan,
                 sayi1 : req.body.sayi1,
@@ -147,7 +143,7 @@ let main = async() => {
             })
         })
 
-        app.post("gostergetoplamı",async (req,res) =>{
+        app.post("/gostergetoplamı",async (req,res) =>{
             await personal_db.insertOne({
                 gostergetoplam: req.body.gostergetoplam,
                 agirlikpuani  : req.body.agirlikpuani,
@@ -157,20 +153,17 @@ let main = async() => {
             })
         })
 
-        app.post("bosapi",async (req , res )=> {
+        app.post("/bosapi",async (req , res )=> {
             await personal_db.insertOne({
 
             })
         })
 
-
-
-
-
-
-
         console.log("listening")
-        await app.listen(3000, "0.0.0.0")
+        await app.listen({
+            port: 3000, 
+            host: "0.0.0.0"
+        })
     }
     catch (err) {
         console.log(err)
